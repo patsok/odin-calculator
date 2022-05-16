@@ -1,3 +1,4 @@
+let allButtons = document.querySelectorAll("button");
 let numberButtons = document.querySelectorAll(".number");
 let operateButtons = document.querySelectorAll(".operate");
 let resultText = document.querySelector(".result");
@@ -12,55 +13,86 @@ let operator = '';
 let operatorSign = '';
 let upperNumber = '';
 
-numberButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        let num = button.value;
-        let check = resultText.textContent;
-        check.length >= 12 ? resultText.textContent : resultText.textContent == "0" ? resultText.textContent = num : resultText.textContent += num;
-    })
-});
+function inputNumber(button) {
+    let num = button.value;
+    let check = resultText.textContent;
+    check.length >= 12 ? resultText.textContent : resultText.textContent == "0" ? resultText.textContent = num : resultText.textContent += num;
+}
 
-operateButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        operator = button.value;
-        operator == 'power' ? operatorSign = "**" : operatorSign = button.textContent;
-        previousResultText.textContent = `${resultText.textContent} ${operatorSign}`;
-        upperNumber = resultText.textContent;
-        resultText.textContent = "0";
-    })
-});
+function inputOperation(button) {
+    operator = button.value;
+    operator == 'power' ? operatorSign = "^" : operatorSign = button.textContent;
+    previousResultText.textContent = `${resultText.textContent} ${operatorSign}`;
+    upperNumber = resultText.textContent;
+    resultText.textContent = "0";
+}
 
-equalsButton.addEventListener("click", () => {
+function inputEquals() {
     let temporaryResult = resultText.textContent;
     if (operator == "divide" && resultText.textContent == "0") {
         previousResultText.textContent = "Divide by 0?"
         resultText.textContent = "Ohh buddy...";
-
+        if (document.addEventListener("keydown", () => {}) == 'undefined') {
+            inputClearAll();
+        }
     } else {
         resultText.textContent = operate(operator, Number(upperNumber), Number(resultText.textContent));
-        previousResultText.textContent = `${previousResultText.textContent} ${temporaryResult}`;
+        previousResultText.textContent = `${previousResultText.textContent} ${temporaryResult} =`;
     }
-})
+}
 
-clearButton.addEventListener("click", () => {
-    resultText.textContent == "0" ? resultText.textContent = "0" : resultText.textContent;
-    resultText.textContent = resultText.textContent.slice(0, -1);
-})
+function inputDot() {
+    let check = resultText.textContent.toString();
+    check.includes(".") ? resultText.textContent : resultText.textContent += ".";
+}
 
-clearAllButton.addEventListener("click", () => {
+function inputClearAll() {
     resultText.textContent = "0";
     previousResultText.textContent = '';
+}
+
+function inputClear() {
+    resultText.textContent == "0" ? resultText.textContent = "0" : resultText.textContent;
+    resultText.textContent = resultText.textContent.slice(0, -1);
+}
+
+document.addEventListener('keydown', (key) => {
+    allButtons.forEach(button => {
+        if (key.key == button.value && button.className == "number") {
+            inputNumber(button);
+        } else if ((key.key == button.textContent || key.key == button.id) && button.className == "operate") {
+            inputOperation(button);
+        } else if (key.key == button.id || (key.key == 'Enter' && button.id == '=')) {
+            inputEquals();
+        } else if (key.key == button.value && button.value == ".") {
+            inputDot();
+        } else if (key.key == "c" && button.value == "AC") {
+            inputClearAll();
+        } else if (key.key == "Backspace" && button.value == "C") {
+            inputClear();
+        }
+    })
 })
+
+numberButtons.forEach(button => {
+    button.addEventListener("click", () => inputNumber(button))
+});
+
+operateButtons.forEach(button => {
+    button.addEventListener("click", () => inputOperation(button))
+});
+
+equalsButton.addEventListener("click", inputEquals);
+
+clearButton.addEventListener("click", inputClear)
+
+clearAllButton.addEventListener("click", inputClearAll)
+
+dotButton.addEventListener("click", inputDot)
 
 plusMinusButton.addEventListener("click", () => {
     resultText.textContent > 0 ? resultText.textContent = `-${resultText.textContent}` : resultText.textContent == "0" ? resultText.textContent = "0" : resultText.textContent = resultText.textContent.slice(1);
 })
-
-dotButton.addEventListener("click", () => {
-    let check = resultText.textContent.toString();
-    check.includes(".") ? resultText.textContent : resultText.textContent += ".";
-})
-
 
 function operate(operator, numFirst, numSecond) {
     let res = 0;
