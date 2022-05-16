@@ -50,7 +50,7 @@ a {
 }
 
 .previousResult {
-    font-size: 2rem;
+    font-size: 1.7rem;
     height: 2.5rem;
 }
 
@@ -80,6 +80,11 @@ button {
 button:hover {
     color: white;
     background-color: var(--secondary-color);
+}
+
+button:disabled {
+    background-color: rgb(194, 194, 194);
+    color: #7c7c7c;
 }
 
 .number {
