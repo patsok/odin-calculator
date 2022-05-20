@@ -8,26 +8,35 @@ let clearButton = document.querySelector(".clear");
 let clearAllButton = document.querySelector(".clearAll");
 let plusMinusButton = document.querySelector(".plusMinus");
 let dotButton = document.querySelector(".dot");
+let piButton = document.querySelector(".pi");
+let factorialButton = document.querySelector(".factorial");
 
 let operator = '';
 let operatorSign = '';
 let upperNumber = '';
-let equal = '';
+let equal = 0;
 let repeatNumber = '';
 let repeatOperation = '';
 
 function inputNumber(button) {
+    if (equal != "0") {
+        resultText.textContent = "0";
+        equal = 0;
+    }
     let num = button.value;
     let check = resultText.textContent;
     check.length >= 12 ? resultText.textContent : resultText.textContent == "0" ? resultText.textContent = num : resultText.textContent += num;
     repeatOperation = 0;
+
 }
 
 function inputOperation(button) {
+    allButtons.forEach(button => button.disabled = false);
     repeatOperation++
     if (repeatOperation == 1) {
         operator = button.value;
         operator == 'power' ? operatorSign = "^" : operatorSign = button.textContent;
+        operator == 'root' ? operatorSign = "√" : operatorSign = button.textContent;
         previousResultText.textContent = `${resultText.textContent} ${operatorSign}`;
         upperNumber = resultText.textContent;
         resultText.textContent = "0";
@@ -36,6 +45,7 @@ function inputOperation(button) {
 }
 
 function inputEquals() {
+    allButtons.forEach(button => button.disabled = false);
     equal++;
     let temporaryResult = resultText.textContent;
     equal == 1 ? repeatNumber = resultText.textContent : '';
@@ -61,6 +71,10 @@ function inputEquals() {
 }
 
 function inputDot() {
+    if (equal != "0") {
+        resultText.textContent = "0";
+        equal = 0;
+    }
     let check = resultText.textContent.toString();
     check.includes(".") ? resultText.textContent : resultText.textContent += ".";
 }
@@ -74,7 +88,29 @@ function inputClearAll() {
 function inputClear() {
     resultText.textContent == "0" ? resultText.textContent = "0" : resultText.textContent;
     resultText.textContent = resultText.textContent.slice(0, -1);
+    resultText.textContent == '' ? resultText.textContent = "0" : resultText.textContent;
 }
+
+function inputPi() {
+    operatorSign = "π"
+    let res = Math.PI * resultText.textContent;
+    previousResultText.textContent = `${resultText.textContent}${operatorSign}`;
+    resultText.textContent = checkNum(res);
+    allButtons.forEach(button => button.textContent != "=" ? button.disabled = false : button.disabled = true);
+}
+
+function inputFactorial() {
+    operatorSign = "!"
+    let fact = resultText.textContent;
+    let res = returnFactorial(fact);
+    previousResultText.textContent = `${resultText.textContent}${operatorSign}`;
+    resultText.textContent = checkNum(res);
+    allButtons.forEach(button => button.textContent != "=" ? button.disabled = false : button.disabled = true);
+}
+
+function returnFactorial(fact) {
+    return fact == 0 ? 1 : fact *= returnFactorial(fact - 1);
+};
 
 document.addEventListener('keydown', (key) => {
     allButtons.forEach(button => {
@@ -104,11 +140,15 @@ operateButtons.forEach(button => {
 
 equalsButton.addEventListener("click", inputEquals);
 
-clearButton.addEventListener("click", inputClear)
+clearButton.addEventListener("click", inputClear);
 
-clearAllButton.addEventListener("click", inputClearAll)
+piButton.addEventListener("click", inputPi)
 
-dotButton.addEventListener("click", inputDot)
+factorialButton.addEventListener("click", inputFactorial)
+
+clearAllButton.addEventListener("click", inputClearAll);
+
+dotButton.addEventListener("click", inputDot);
 
 plusMinusButton.addEventListener("click", () => {
     resultText.textContent > 0 ? resultText.textContent = `-${resultText.textContent}` : resultText.textContent == "0" ? resultText.textContent = "0" : resultText.textContent = resultText.textContent.slice(1);
@@ -124,8 +164,14 @@ function operate(operator, numFirst, numSecond) {
         res = numFirst * numSecond;
     } else if (operator == "divide") {
         res = numFirst / numSecond;
-    } else {
+    } else if (operator == "power") {
         res = numFirst ** numSecond;
+    } else if (operator == "root") {
+        res = Math.pow(numFirst, 1 / numSecond);
+    } else if (operator == "modulo") {
+        res = numFirst % numSecond;
+    } else {
+        res = Math.PI * numFirst;
     }
     return checkNum(res);
 
