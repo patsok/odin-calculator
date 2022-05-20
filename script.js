@@ -92,6 +92,7 @@ function inputClear() {
 }
 
 function inputPi() {
+    equal++
     operatorSign = "π"
     let res = Math.PI * resultText.textContent;
     previousResultText.textContent = `${resultText.textContent}${operatorSign}`;
@@ -100,6 +101,7 @@ function inputPi() {
 }
 
 function inputFactorial() {
+    equal++
     operatorSign = "!"
     let fact = resultText.textContent;
     let res = returnFactorial(fact);
@@ -114,18 +116,24 @@ function returnFactorial(fact) {
 
 document.addEventListener('keydown', (key) => {
     allButtons.forEach(button => {
+        button.blur();
         if (key.key == button.value && button.className == "number") {
             inputNumber(button);
         } else if ((key.key == button.textContent || key.key == button.id) && button.className == "operate") {
             inputOperation(button);
         } else if (key.key == button.id || (key.key == 'Enter' && button.id == '=')) {
-            inputEquals();
+            if (equalsButton.disabled == false) {
+                console.log(equalsButton.disabled);
+                inputEquals();
+            }
         } else if (key.key == button.value && button.value == ".") {
             inputDot();
         } else if (key.key == "c" && button.value == "AC") {
             inputClearAll();
         } else if (key.key == "Backspace" && button.value == "C") {
             inputClear();
+        } else if (key.key == "!" && button.value == "factorial") {
+            inputFactorial();
         }
     })
 })
@@ -156,25 +164,32 @@ plusMinusButton.addEventListener("click", () => {
 
 function operate(operator, numFirst, numSecond) {
     let res = 0;
-    if (operator == "add") {
-        res = numFirst + numSecond;
-    } else if (operator == "subtract") {
-        res = numFirst - numSecond;
-    } else if (operator == "multiply") {
-        res = numFirst * numSecond;
-    } else if (operator == "divide") {
-        res = numFirst / numSecond;
-    } else if (operator == "power") {
-        res = numFirst ** numSecond;
-    } else if (operator == "root") {
-        res = Math.pow(numFirst, 1 / numSecond);
-    } else if (operator == "modulo") {
-        res = numFirst % numSecond;
-    } else {
-        res = Math.PI * numFirst;
+    switch (operator) {
+        case 'add':
+            res = numFirst + numSecond;
+            break;
+        case 'subtract':
+            res = numFirst - numSecond;
+            break;
+        case 'multiply':
+            res = numFirst * numSecond;
+            break;
+        case 'divide':
+            res = numFirst / numSecond;
+            break;
+        case 'power':
+            res = numFirst ** numSecond;
+            break;
+        case 'root':
+            res = Math.pow(numFirst, 1 / numSecond);
+            break;
+        case 'modulo':
+            res = numFirst % numSecond;
+            break;
+        default:
+            res = "Error 13";
     }
     return checkNum(res);
-
 }
 
 function checkNum(num) {
