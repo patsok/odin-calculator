@@ -99,3 +99,40 @@ button:disabled {
     width: 100%;
     text-align: center;
 }
+
+@media only screen and (max-width: 700px) {
+    .container {
+        width: 17rem;
+    }
+    .resultContainer {
+        height: 5rem;
+    }
+    .previousResult {
+        font-size: 0.7rem;
+        height: 1.2rem;
+    }
+    .result {
+        font-size: 1.7rem;
+    }
+    .buttonsContainer {
+        gap: 0.3rem;
+    }
+    button {
+        text-align: center;
+        padding-top: 4px;
+        width: 3rem;
+        height: 2.4rem;
+        font-size: 1.8rem;
+    }
+    button[value="power"] {
+        padding-top: 0px;
+    }
+    .clearAll {
+        padding: 0;
+        padding-top: 3px;
+    }
+    button:hover {
+        color: white;
+        background-color: var(--secondary-color);
+    }
+}

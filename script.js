@@ -35,8 +35,7 @@ function inputOperation(button) {
     repeatOperation++
     if (repeatOperation == 1) {
         operator = button.value;
-        operator == 'power' ? operatorSign = "^" : operatorSign = button.textContent;
-        operator == 'root' ? operatorSign = "√" : operatorSign = button.textContent;
+        operator == 'power' ? operatorSign = "^" : operator == 'root' ? operatorSign = "√" : operatorSign = button.textContent;
         previousResultText.textContent = `${resultText.textContent} ${operatorSign}`;
         upperNumber = resultText.textContent;
         resultText.textContent = "0";
@@ -86,6 +85,10 @@ function inputClearAll() {
 }
 
 function inputClear() {
+    let inputLength = resultText.textContent.length;
+    if (resultText.textContent.charAt(inputLength - 2) == ".") {
+        resultText.textContent = resultText.textContent.slice(0, -1);
+    }
     resultText.textContent == "0" ? resultText.textContent = "0" : resultText.textContent;
     resultText.textContent = resultText.textContent.slice(0, -1);
     resultText.textContent == '' ? resultText.textContent = "0" : resultText.textContent;
