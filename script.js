@@ -126,7 +126,6 @@ document.addEventListener('keydown', (key) => {
             inputOperation(button);
         } else if (key.key == button.id || (key.key == 'Enter' && button.id == '=')) {
             if (equalsButton.disabled == false) {
-                console.log(equalsButton.disabled);
                 inputEquals();
             }
         } else if (key.key == button.value && button.value == ".") {
@@ -196,13 +195,15 @@ function operate(operator, numFirst, numSecond) {
 }
 
 function checkNum(num) {
-    let check = num.toString();
-    if (check.includes(".") && check.length >= 12) {
-        let [a, b] = check.split(".");
-        let count = 10 - a.length;
-        let decimal = b.slice(0, count);
-        check = `${a}.${decimal}`;
-        num = Number(`${a}.${decimal}`);
+    check = num.toString();
+    if (!num.toString().includes('e')) {
+        if (check.includes(".") && check.length >= 12) {
+            let [a, b] = check.split(".");
+            let count = 10 - a.length;
+            let decimal = b.slice(0, count);
+            check = `${a}.${decimal}`;
+            num = Number(`${a}.${decimal}`);
+        }
     }
     return check.length > 12 ? num.toExponential(6) : num;
 }

@@ -54,6 +54,17 @@ a {
     height: 2.5rem;
 }
 
+#sup {
+    position: absolute;
+    top: 10px;
+    left: 33px;
+    font-size: 1.2rem;
+}
+
+button[value="root"] {
+    position: relative;
+}
+
 .buttonsContainer {
     display: flex;
     flex-wrap: wrap;
@@ -113,6 +124,11 @@ button:disabled {
     }
     .result {
         font-size: 1.7rem;
+    }
+    #sup {
+        top: 3px;
+        left: 12px;
+        font-size: 0.6rem;
     }
     .buttonsContainer {
         gap: 0.3rem;
